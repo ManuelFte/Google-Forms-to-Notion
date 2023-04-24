@@ -25,7 +25,7 @@ This will replace the `{Name}` placeholder with the form response for the "Name"
 
 ### Response configurations
 
-Customize the `responseConfigs` object in `variables.js` to define how the responses should be mapped to Notion properties or blocks. You can use the following configurations: <!-- I need to state how they're going to be outputted by default if no configurations are provided -->
+Customize the `responseConfigs` object in `variables.default.js` to define how the responses should be mapped to Notion properties or blocks. You can use the following configurations: <!-- I need to state how they're going to be outputted by default if no configurations are provided -->
 
 <!-- I don't like this wording -->
 - `properties`: Define which form responses should be saved as properties in Notion.
