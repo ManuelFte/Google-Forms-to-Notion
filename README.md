@@ -12,6 +12,19 @@ Google Apps Script to automatically forward Google Forms responses to a Notion d
 
 ## Configuration
 
+### Page name with placeholders
+
+<!-- Mention that the placeholders need to come from the responses -->
+You can use placeholders in the pageName variable to customize the title of the Notion page. For example:
+
+```js
+const pageName = 'Response from {Name}';
+```
+
+This will replace the `{Name}` placeholder with the form response for the "Name" question.
+
+### Response configurations
+
 Customize the `responseConfigs` object in `variables.js` to define how the responses should be mapped to Notion properties or blocks. You can use the following configurations: <!-- I need to state how they're going to be outputted by default if no configurations are provided -->
 
 <!-- I don't like this wording -->
@@ -71,13 +84,3 @@ const responseConfigs = {
 };
 ```
 
-### Page name with placeholders
-
-<!-- Mention that the placeholders need to come from the responses -->
-You can use placeholders in the pageName variable to customize the title of the Notion page. For example:
-
-```js
-const pageName = 'Response from {Name}';
-```
-
-This will replace the `{Name}` placeholder with the form response for the "Name" question.
