@@ -40,9 +40,7 @@ const onFormSubmit = (form) => {
 
       // Save the configurations in the object for properties
       properties[mappedQuestion] = {
-        questionType: {
-          propertyInfo
-        }
+        questionType: propertyInfo
       };
       // If there are block configurations for this question...
     } else if (blockConfigs) {
