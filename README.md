@@ -12,7 +12,7 @@ Google Apps Script to automatically forward Google Forms responses to a Notion d
 
 ## Configuration
 
-Customize the `fieldConfigs` object in `variables.js` to define how the responses should be mapped to Notion properties or blocks. You can use the following configurations: <!-- I need to state how they're going to be outputted by default if no configurations are provided -->
+Customize the `responseConfigs` object in `variables.js` to define how the responses should be mapped to Notion properties or blocks. You can use the following configurations: <!-- I need to state how they're going to be outputted by default if no configurations are provided -->
 
 <!-- I don't like this wording -->
 - `properties`: Define which form responses should be saved as properties in Notion.
@@ -24,7 +24,7 @@ Customize the `fieldConfigs` object in `variables.js` to define how the response
 #### Properties
 
 ```js
-const fieldConfigs = {
+const responseConfigs = {
   properties: {
     'Example Question 1': {
       mapped: 'Notion Property 1',
@@ -48,7 +48,7 @@ const fieldConfigs = {
 #### Blocks
 
 ```js
-const fieldConfigs = {
+const responseConfigs = {
   // ...
   blocks: {
     'Example Question 3': {

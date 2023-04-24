@@ -1,4 +1,4 @@
-/* global notionAPIKey, databaseID, pageName, fieldConfigs, getStructure, UrlFetchApp */
+/* global notionAPIKey, databaseID, pageName, responseConfigs, getStructure, UrlFetchApp */
 'use strict';
 
 // Function called on form submission
@@ -18,14 +18,14 @@ const onFormSubmit = (form) => {
     const answer = response.getResponse() || '`<Empty>`';
     questionsAndAnswers[question] = answer;
 
-    // Ignore fields listed in the 'ignore' array
-    if (fieldConfigs.ignore.includes(question)) {
+    // Ignore responses listed in the 'ignore' array
+    if (responseConfigs.ignore.includes(question)) {
       continue;
     }
 
     // Find any property or block configuration that matches the current question
-    const propertyConfigs = Object.entries(fieldConfigs.properties).find(([key, value]) => key === question);
-    const blockConfigs = propertyConfigs ? null : Object.entries(fieldConfigs.blocks).find(([key, value]) => key === question);
+    const propertyConfigs = Object.entries(responseConfigs.properties).find(([key, value]) => key === question);
+    const blockConfigs = propertyConfigs ? null : Object.entries(responseConfigs.blocks).find(([key, value]) => key === question);
 
     // If there are property configurations for this question...
     if (propertyConfigs) {
