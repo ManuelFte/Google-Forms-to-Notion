@@ -2,7 +2,7 @@
 'use strict';
 
 // Function called on form submission
-const onFormSubmit1 = (form) => {
+const onFormSubmit = (form) => {
   // Get all Google Form responses
   const responses = form.response.getItemResponses();
   // Objects to store the parsed properties and blocks
