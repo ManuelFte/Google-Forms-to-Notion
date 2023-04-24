@@ -1,6 +1,6 @@
 # Google Forms to Notion
 
-Google App Sscript to automatically forward Google Forms responses to a Notion database. Supports a wide range of customizations.
+Google Apps Script to automatically forward Google Forms responses to a Notion database. Supports a wide range of customizations.
 
 ## Installation
 
@@ -71,7 +71,7 @@ const fieldConfigs = {
 };
 ```
 
-### Page Name with placeholders
+### Page name with placeholders
 
 <!-- Mention that the placeholders need to come from the responses -->
 You can use placeholders in the pageName variable to customize the title of the Notion page. For example:
