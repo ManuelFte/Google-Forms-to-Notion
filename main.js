@@ -16,57 +16,41 @@ const onFormSubmit = (form) => {
   for (const response of responses) {
     const question = response.getItem().getTitle();
     const answer = response.getResponse() || '';
+
     questionsAndAnswers[question] = answer;
 
-    // Ignore responses listed in the 'ignore' array
-    if (responseConfigs.ignore.includes(question)) {
-      continue;
-    }
+    // Find a configuration object that matches the current question
+    const config = responseConfigs.find(config => config.question === question);
 
-    // Find any property or block configuration that matches the current question
-    const propertyConfigs = Object.entries(responseConfigs.properties).find(([key, value]) => key === question);
-    const blockConfigs = propertyConfigs ? null : Object.entries(responseConfigs.blocks).find(([key, value]) => key === question);
+    // If the configuration is found and it's not marked to be ignored...
+    if (config && !config.ignore) {
+      // If the item is to be processed as a block...
+      if (config.item === 'block') {
+        // Parse the heading as a Notion block object
+        const questionType = config.type || 'heading_1';
+        const mappedQuestion = config.mapped || question;
 
-    // If there are property configurations for this question...
-    if (propertyConfigs) {
-      // Extract the configurations
-      const [originalQuestion, configs] = propertyConfigs;
-      const mappedQuestion = configs.mapped || originalQuestion;
-      const questionType = configs.type || 'rich_text';
-      const mappedAnswer = configs.answers?.[answer]?.mapped || answer;
+        children.push(getStructure('blocks', questionType, mappedQuestion));
 
-      // Parse the information as a Notion property object
-      const propertyInfo = getStructure('properties', questionType, mappedAnswer);
+        // Parse the content as a Notion block object
+        const answerType = config.answers?.find(a => a.answer === answer)?.type || 'paragraph';
+        const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
 
-      // Save the configurations in the object for properties
-      properties[mappedQuestion] = {
-        [questionType]: propertyInfo
-      };
-      // If there are block configurations for this question...
-    } else if (blockConfigs) {
-      // Extract the configurations
-      const [originalQuestion, configs] = blockConfigs;
-      const mappedQuestion = configs.mapped || originalQuestion;
-      const questionType = configs.type || 'heading_1';
-      const mappedAnswer = configs.answers?.[answer]?.mapped || answer;
-      const answerType = configs.answers?.[answer]?.type || 'paragraph';
+        children.push(getStructure('blocks', answerType, mappedAnswer));
+      } else {
+        // Process as a property
+        const questionType = config.type || 'rich_text';
+        const mappedQuestion = config.mapped || question;
+        const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
 
-      // Parse the heading as a Notion block object
-      children.push(getStructure('blocks', questionType, mappedQuestion));
+        // Parse the information as a Notion property object
+        const propertyInfo = getStructure('properties', questionType, mappedAnswer);
 
-      // Parse the content as a Notion block object
-      children.push(getStructure('blocks', answerType, mappedAnswer));
-      // If no configurations are specified, it will default to saving the answers as properties, in rich text format, using the question string as the property name
-    } else {
-      properties[question] = {
-        rich_text: [
-          {
-            text: {
-              content: answer
-            }
-          }
-        ]
-      };
+        // Save the configurations in the object for properties
+        properties[mappedQuestion] = {
+          [questionType]: propertyInfo
+        };
+      }
     }
   }
 
@@ -84,14 +68,6 @@ const onFormSubmit = (form) => {
     ]
   };
 
-  // Prepare the headers
-  const url = 'https://api.notion.com/v1/pages';
-  const headers = {
-    Authorization: `Bearer ${notionAPIKey}`,
-    'Content-Type': 'application/json',
-    'Notion-Version': '2022-06-28'
-  };
-
   // Create payload for the Notion API request using the parsed properties and blocks
   const payload = {
     object: 'page',
@@ -104,9 +80,13 @@ const onFormSubmit = (form) => {
   };
 
   // Send a request to the Notion API to create a new page with the given payload
-  UrlFetchApp.fetch(url, {
-    method: 'post',
-    headers,
+  UrlFetchApp.fetch('https://api.notion.com/v1/pages', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${notionAPIKey}`,
+      'Content-Type': 'application/json',
+      'Notion-Version': '2022-06-28'
+    },
     payload: JSON.stringify(payload),
     contentType: 'application/json'
   });
