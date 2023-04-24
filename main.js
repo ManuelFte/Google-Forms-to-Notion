@@ -22,35 +22,52 @@ const onFormSubmit = (form) => {
     // Find a configuration object that matches the current question
     const config = responseConfigs.find(config => config.question === question);
 
-    // If the configuration is found and it's not marked to be ignored...
-    if (config && !config.ignore) {
-      // If the item is to be processed as a block...
-      if (config.item === 'block') {
-        // Parse the heading as a Notion block object
-        const questionType = config.type || 'heading_1';
-        const mappedQuestion = config.mapped || question;
+    // If no configurations are specified, it will default to saving the answers as properties, in rich text format, using the question string as the property name
+    if (!config) {
+      properties[question] = {
+        rich_text: [
+          {
+            text: {
+              content: answer
+            }
+          }
+        ]
+      };
 
-        children.push(getStructure('blocks', questionType, mappedQuestion));
+      continue;
+    }
 
-        // Parse the content as a Notion block object
-        const answerType = config.answers?.find(a => a.answer === answer)?.type || 'paragraph';
-        const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
+    // If the response is marked to be ignored..
+    if (config.ignore) {
+      continue;
+    }
 
-        children.push(getStructure('blocks', answerType, mappedAnswer));
-      } else {
-        // Process as a property
-        const questionType = config.type || 'rich_text';
-        const mappedQuestion = config.mapped || question;
-        const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
+    // If the item is to be processed as a block...
+    if (config.item === 'block') {
+      // Parse the heading as a Notion block object
+      const questionType = config.type || 'heading_1';
+      const mappedQuestion = config.mapped || question;
 
-        // Parse the information as a Notion property object
-        const propertyInfo = getStructure('properties', questionType, mappedAnswer);
+      children.push(getStructure('blocks', questionType, mappedQuestion));
 
-        // Save the configurations in the object for properties
-        properties[mappedQuestion] = {
-          [questionType]: propertyInfo
-        };
-      }
+      // Parse the content as a Notion block object
+      const answerType = config.answers?.find(a => a.answer === answer)?.type || 'paragraph';
+      const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
+
+      children.push(getStructure('blocks', answerType, mappedAnswer));
+      // If the item is to be processed as a property
+    } else {
+      const questionType = config.type || 'rich_text';
+      const mappedQuestion = config.mapped || question;
+      const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
+
+      // Parse the information as a Notion property object
+      const propertyInfo = getStructure('properties', questionType, mappedAnswer);
+
+      // Save the configurations in the object for properties
+      properties[mappedQuestion] = {
+        [questionType]: propertyInfo
+      };
     }
   }
 
