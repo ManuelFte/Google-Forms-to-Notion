@@ -4,11 +4,11 @@ Google Apps Script to automatically forward Google Forms responses to a Notion d
 
 ## Installation
 
-<!-- Improve with screenshots and instructions on how to get the Notion API key -->
+<!-- Improve with screenshots and instructions on how to get the Notion API key and add the integration to the database -->
 1. Create a new Google Apps Script project.
 2. Copy the contents of [main.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/main.js), [structures.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/structures.js), and [variables.default.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/variables.default.js) into separate script files in the Google Apps Script editor.
-3. Replace the placeholder values in variables.js with your Notion API key and the ID of the Notion database you want to send the responses to.
-3 Set up a trigger in the Google Apps Script project to run the onFormSubmit1 function when a form response is submitted.
+3. Replace the placeholder values in `variables.js` with your Notion API key and the ID of the Notion database you want to send the responses to.
+4. Set up a trigger in the Google Apps Script project to run the `onFormSubmit` function when a form response is submitted.
 
 ## Configuration
 
