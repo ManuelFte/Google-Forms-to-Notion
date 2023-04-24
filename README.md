@@ -25,62 +25,55 @@ This will replace the `{Name}` placeholder with the form response for the "Name"
 
 ### Response configurations
 
-Customize the `responseConfigs` object in `variables.default.js` to define how the responses should be mapped to Notion properties or blocks. You can use the following configurations: <!-- I need to state how they're going to be outputted by default if no configurations are provided -->
-
-<!-- I don't like this wording -->
-- `properties`: Define which form responses should be saved as properties in Notion.
-- `blocks`: Define which form responses should be saved as blocks in Notion.
-- `ignore`: Define form responses to ignore.
+Customize the `responseConfigs` object in `variables.default.js` to define how the responses should be mapped to Notion properties or blocks. If no configurations are provided, the responses will be outputted as properties in rich text format, using the question string as the property name.
 
 ### Examples
 
-#### Properties
-
 ```js
-const responseConfigs = {
-  properties: {
-    'Example Question 1': {
-      mapped: 'Notion Property 1',
-      type: 'date'
-    },
-    'Example Question 2': {
-      answers: {
-        'Option 1': {
-          mapped: 'Option A'
-        },
-        'Option 2': {
-          mapped: 'Option B'
-        }
-      }
-    }
+const responseConfigs = [
+  {
+    question: 'Example Question 1',
+    mapped: 'Notion Property 1',
+    type: 'date'
   },
-  // ...
-};
-```
-
-#### Blocks
-
-```js
-const responseConfigs = {
-  // ...
-  blocks: {
-    'Example Question 3': {
-      type: 'heading_1'
-    },
-    'Example Question 4': {
-      answers: {
-        'Option 1': {
-          mapped: 'Option A',
-          type: 'paragraph'
-        },
-        'Option 2': {
-          mapped: 'Option B',
-          type: 'paragraph'
-        }
+  {
+    question: 'Example Question 2',
+    answers: [
+      {
+        answer: 'Option 1',
+        mapped: 'Option A'
+      },
+      {
+        answer: 'Option 2',
+        mapped: 'Option B'
       }
-    }
+    ]
   },
-  // ...
-};
+  {
+    question: 'Example Question 3',
+    item: 'block',
+    type: 'heading_1'
+  },
+  {
+    question: 'Example Question 4',
+    item: 'block',
+    answers: [
+      {
+        answer: 'Option 1',
+        mapped: 'Option A',
+        type: 'paragraph'
+      },
+      {
+        answer: 'Option 2',
+        mapped: 'Option B',
+        type: 'paragraph'
+      }
+    ]
+  },
+  {
+    question: 'Some string',
+    ignore: true
+  }
+];
 ```
 
