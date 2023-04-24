@@ -105,8 +105,6 @@ const onFormSubmit = (form) => {
     children
   };
 
-  console.log(JSON.stringify(payload));
-
   // Send a request to the Notion API to create a new page with the given payload
   UrlFetchApp.fetch(url, {
     method: 'post',
