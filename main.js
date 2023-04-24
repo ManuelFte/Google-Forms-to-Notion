@@ -15,7 +15,7 @@ const onFormSubmit = (form) => {
   // Process each response
   for (const response of responses) {
     const question = response.getItem().getTitle();
-    const answer = response.getResponse() || '`<Empty>`';
+    const answer = response.getResponse() || '';
     questionsAndAnswers[question] = answer;
 
     // Ignore responses listed in the 'ignore' array
@@ -102,8 +102,6 @@ const onFormSubmit = (form) => {
     properties,
     children
   };
-
-  console.log(JSON.stringify(payload));
 
   // Send a request to the Notion API to create a new page with the given payload
   UrlFetchApp.fetch(url, {
