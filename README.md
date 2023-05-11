@@ -6,9 +6,9 @@ Google Apps Script to automatically forward Google Forms responses to a Notion d
 
 <!-- Improve with screenshots and instructions on how to get the Notion API key and add the integration to the database -->
 1. Create a new Google Apps Script project.
-2. Copy the contents of [main.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/main.js), [structures.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/structures.js), and [variables.default.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/variables.default.js) into separate script files in the Google Apps Script editor.
-3. Replace the placeholder values in `variables.default.js` with your Notion API key and the ID of the Notion database you want to send the responses to.
-4. Set up a trigger in the Google Apps Script project to run the `onFormSubmit` function when a form response is submitted.
+2. Copy the contents of [index.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/index.js), [Structure.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/Structure.js), and [config.default.js](https://raw.githubusercontent.com/ManuelFte/Google-Forms-to-Notion/main/config.default.js) into separate script files in the Google Apps Script editor.
+3. Replace the placeholder values in `config.default.js` with your Notion API key and the ID of the Notion database you want to send the responses to.
+4. Set up a trigger in the Google Apps Script project to run the `googleFormsToNotion` function when a form response is submitted.
 
 ## Configuration
 
@@ -18,19 +18,19 @@ Google Apps Script to automatically forward Google Forms responses to a Notion d
 You can use placeholders in the `pageName` variable to customize the title of the Notion page. For example:
 
 ```js
-const pageName = 'Response from {Name}';
+pageName: 'Response from {Name}';
 ```
 
 This will replace the `{Name}` placeholder with the form response for the "Name" question.
 
 ### Response configurations
 
-Customize the `responseConfigs` object in `variables.default.js` to define how the responses should be mapped to Notion properties or blocks. If no configurations are provided, the responses will be outputted as properties in rich text format, using the question string as the property name.
+Customize the `responseConfigs` variable in `config.default.js` to define how the responses should be mapped to Notion properties or blocks. If no configurations are provided, the responses will be outputted as properties in rich text format, using the question string as the property name.
 
 ### Examples
 
 ```js
-const responseConfigs = [
+responseConfigs: [
   {
     question: 'Example Question 1',
     mapped: 'Notion Property 1',
