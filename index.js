@@ -20,6 +20,18 @@ function googleFormsToNotion (form) {
     };
   };
 
+  const getStructure = (field, type, content) => {
+    const structures = {
+      property: gftnProperties,
+      block: gftnBlocks
+    };
+    if (!structures[field] || !structures[field][type]) {
+      throw new Error(`Invalid field or type: field=${field}, type=${type}`);
+    }
+
+    return structures[field][type];
+  };
+
   const parseResponseAsProperty = (config, question, answer) => {
     const questionType = config.type || 'rich_text';
     const mappedQuestion = config.mapped || question;
