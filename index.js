@@ -3,7 +3,7 @@
 'use strict';
 
 function googleFormsToNotion (form) {
-  const { notionAPIKey, databaseID, pageName, responseConfigs } = gftnConfigs;
+  const { APIkey, databaseID, pageName, responseConfigs } = gftnConfigs;
 
   // Process the page's name. If a page name was specified, it will look for placeholders in it that match a question. If not, it will default to the form's title
   const parsePageName = (questionsAndAnswers) => {
@@ -129,7 +129,7 @@ function googleFormsToNotion (form) {
     const params = {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${notionAPIKey}`,
+        Authorization: `Bearer ${APIkey}`,
         'Content-Type': 'application/json',
         'Notion-Version': '2022-06-28'
       },
