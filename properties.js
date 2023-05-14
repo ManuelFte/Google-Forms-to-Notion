@@ -1,20 +1,28 @@
 'use strict';
 
-const gftnProperties = {
-  // Date
-  date: {
-    start: this.content
-  },
-  // Rich text
-  rich_text: [
-    {
-      text: {
-        content: this.content
+const getProperty = (type, content) => {
+  const structures = {
+    // Date
+    date: {
+      start: content
+    },
+    // Rich text
+    rich_text: [
+      {
+        text: {
+          content
+        }
       }
+    ],
+    // Select
+    select: {
+      name: content
     }
-  ],
-  // Select
-  select: {
-    name: this.content
+  };
+
+  if (!structures[type]) {
+    throw new Error(`Invalid type: type=${type}`);
   }
+
+  return structures[type];
 };

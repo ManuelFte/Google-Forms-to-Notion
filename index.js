@@ -1,9 +1,9 @@
-/* global gftnConfigs Structure UrlFetchApp */
+/* global gftnConfig getProperty getBlock UrlFetchApp */
 
 'use strict';
 
 function googleFormsToNotion (form) {
-  const { APIkey, databaseID, pageName, responseConfigs } = gftnConfigs;
+  const { APIkey, databaseID, pageName, responseConfigs } = gftnConfig;
 
   // Process the page's name. If a page name was specified, it will look for placeholders in it that match a question. If not, it will default to the form's title
   const parsePageName = (questionsAndAnswers) => {
@@ -20,24 +20,12 @@ function googleFormsToNotion (form) {
     };
   };
 
-  const getStructure = (field, type, content) => {
-    const structures = {
-      property: gftnProperties,
-      block: gftnBlocks
-    };
-    if (!structures[field] || !structures[field][type]) {
-      throw new Error(`Invalid field or type: field=${field}, type=${type}`);
-    }
-
-    return structures[field][type];
-  };
-
   const parseResponseAsProperty = (config, question, answer) => {
     const questionType = config.type || 'rich_text';
     const mappedQuestion = config.mapped || question;
     const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
 
-    const property = new Structure(questionType, mappedAnswer).getPropertyStructure();
+    const property = getProperty(questionType, mappedAnswer);
 
     return {
       [mappedQuestion]: {
@@ -51,13 +39,13 @@ function googleFormsToNotion (form) {
     const questionType = config.type || 'heading_1';
     const mappedQuestion = config.mapped || question;
 
-    const questionBlock = new Structure(questionType, mappedQuestion).getBlockStructure();
+    const questionBlock = getBlock(questionType, mappedQuestion);
 
     // Parse the content as a Notion block object
     const answerType = config.answers?.find(a => a.answer === answer)?.type || 'paragraph';
     const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
 
-    const answerBlock = new Structure(answerType, mappedAnswer).getBlockStructure();
+    const answerBlock = getBlock(answerType, mappedAnswer);
 
     return [questionBlock, answerBlock];
   };
@@ -82,7 +70,7 @@ function googleFormsToNotion (form) {
       // If no configurations are specified, it will default to saving the answers as properties, in rich text format, using the question string as the property name
       if (!config) {
         properties[question] = {
-          rich_text: new Structure('rich_text', answer).getPropertyStructure()
+          rich_text: getProperty('rich_text', answer)
         };
 
         continue;
