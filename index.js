@@ -7,7 +7,6 @@
  * @license MIT
  */
 
-
 'use strict';
 
 function googleFormsToNotion (form) {
@@ -36,9 +35,7 @@ function googleFormsToNotion (form) {
     const property = getProperty(questionType, mappedAnswer);
 
     return {
-      [mappedQuestion]: {
-        [questionType]: property
-      }
+      [mappedQuestion]: property
     };
   };
 
@@ -77,9 +74,7 @@ function googleFormsToNotion (form) {
 
       // If no configurations are specified, it will default to saving the answers as properties, in rich text format, using the question string as the property name
       if (!config) {
-        properties[question] = {
-          rich_text: getProperty('rich_text', answer)
-        };
+        properties[question] = getProperty('rich_text', answer);
 
         continue;
       }

@@ -24,5 +24,7 @@ const getProperty = (type, content) => {
     throw new Error(`Invalid type: type=${type}`);
   }
 
-  return structures[type];
+  return {
+    [type]: structures[type]
+  };
 };
