@@ -1,5 +1,13 @@
 /* global gftnConfig getProperty getBlock UrlFetchApp */
 
+/**
+ * @fileoverview Google Apps Script to automatically forward Google Forms responses to a Notion database. Supports a wide range of customizations.
+ * @author Manuel de la Fuente (https://manuel.life)
+ * @version 2.0.0-dev
+ * @license MIT
+ */
+
+
 'use strict';
 
 function googleFormsToNotion (form) {
