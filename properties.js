@@ -17,7 +17,15 @@ const getProperty = (type, content) => {
     // Select
     select: {
       name: content
-    }
+    },
+    // Title
+    title: [
+      {
+        text: {
+          content
+        }
+      }
+    ]
   };
 
   if (!structures[type]) {

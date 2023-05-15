@@ -16,15 +16,7 @@ function googleFormsToNotion (form) {
   const parsePageName = (questionsAndAnswers) => {
     const processedName = pageName ? pageName.replace(/\{(.*?)\}/g, (match, p1) => questionsAndAnswers[p1] || match) : form.source.getTitle();
 
-    return {
-      title: [
-        {
-          text: {
-            content: processedName
-          }
-        }
-      ]
-    };
+    return getProperty('title', processedName);
   };
 
   const parseResponseAsProperty = (config, question, answer) => {
@@ -70,16 +62,9 @@ function googleFormsToNotion (form) {
       questionsAndAnswers[question] = answer;
 
       // Find a configuration object that matches the current question
-      const config = responseConfigs.find(config => config.question === question);
+      const config = responseConfigs.find(config => config.question === question) || {};
 
-      // If no configurations are specified, it will default to saving the answers as properties, in rich text format, using the question string as the property name
-      if (!config) {
-        properties[question] = getProperty('rich_text', answer);
-
-        continue;
-      }
-
-      // If the response is marked to be ignored..
+      // Skip this question if it's marked to be ignored..
       if (config.ignore) {
         continue;
       }
