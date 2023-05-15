@@ -15,8 +15,11 @@ function googleFormsToNotion (form) {
   // Process the page's name. If a page name was specified, it will look for placeholders in it that match a question. If not, it will default to the form's title
   const parsePageName = (questionsAndAnswers) => {
     const processedName = pageName ? pageName.replace(/\{(.*?)\}/g, (match, p1) => questionsAndAnswers[p1] || match) : form.source.getTitle();
+    const property = getProperty('title', processedName);
 
-    return getProperty('title', processedName);
+    return {
+      Name: property
+    };
   };
 
   const parseResponseAsProperty = (config, question, answer) => {
@@ -72,16 +75,20 @@ function googleFormsToNotion (form) {
       // If the item is to be processed as a block...
       if (config.item === 'block') {
         const blocks = parseResponseAsBlock(config, question, answer);
+
         children.push(...blocks);
       // If the item is to be processed as a property
       } else {
         const property = parseResponseAsProperty(config, question, answer);
+
         Object.assign(properties, property);
       }
     }
 
     // Save the page's name to the properties
-    properties.Name = parsePageName(questionsAndAnswers);
+    const name = parsePageName(questionsAndAnswers);
+
+    Object.assign(properties, name);
 
     return { properties, children };
   };
