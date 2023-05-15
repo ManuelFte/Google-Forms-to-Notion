@@ -10,7 +10,7 @@
 'use strict';
 
 function googleFormsToNotion (form) {
-  const { APIkey, databaseID, pageName, responseConfigs } = gftnConfig;
+  const { apiKey, databaseId, pageName, responseConfig } = gftnConfig;
 
   // Process the page's name. If a page name was specified, it will look for placeholders in it that match a question. If not, it will default to the form's title
   const parsePageName = (questionsAndAnswers) => {
@@ -62,7 +62,7 @@ function googleFormsToNotion (form) {
       questionsAndAnswers[question] = answer;
 
       // Find a configuration object that matches the current question
-      const config = responseConfigs.find(config => config.question === question) || {};
+      const config = responseConfig.find(config => config.question === question) || {};
 
       // Skip this question if it's marked to be ignored..
       if (config.ignore) {
@@ -93,7 +93,7 @@ function googleFormsToNotion (form) {
       object: 'page',
       parent: {
         type: 'database_id',
-        database_id: databaseID
+        database_id: databaseId
       },
       properties,
       children
@@ -105,7 +105,7 @@ function googleFormsToNotion (form) {
     const params = {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${APIkey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'Notion-Version': '2022-06-28'
       },
