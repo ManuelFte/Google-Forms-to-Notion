@@ -1,6 +1,6 @@
 'use strict';
 
-const getBlock = (type, content) => {
+const getBlock = ({ type, content }) => {
   const structures = {
     // Heading 1
     heading_1: {

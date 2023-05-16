@@ -13,39 +13,39 @@ function googleFormsToNotion (form) {
   const { apiKey, databaseId, pageName, responseConfig } = gftnConfig;
 
   // Process the page's name. If a page name was specified, it will look for placeholders in it that match a question. If not, it will default to the form's title
-  const parsePageName = (questionsAndAnswers) => {
+  const parsePageName = ({ questionsAndAnswers }) => {
     const processedName = pageName ? pageName.replace(/\{(.*?)\}/g, (match, p1) => questionsAndAnswers[p1] || match) : form.source.getTitle();
-    const property = getProperty('title', processedName);
+    const property = getProperty({ type: 'title', content: processedName });
 
     return {
       Name: property
     };
   };
 
-  const parseResponseAsProperty = (config, question, answer) => {
+  const parseResponseAsProperty = ({ config, question, answer }) => {
     const questionType = config.type || 'rich_text';
     const mappedQuestion = config.mapped || question;
     const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
 
-    const property = getProperty(questionType, mappedAnswer);
+    const property = getProperty({ type: questionType, content: mappedAnswer });
 
     return {
       [mappedQuestion]: property
     };
   };
 
-  const parseResponseAsBlock = (config, question, answer) => {
+  const parseResponseAsBlock = ({ config, question, answer }) => {
     // Parse the heading as a Notion block object
     const questionType = config.type || 'heading_1';
     const mappedQuestion = config.mapped || question;
 
-    const questionBlock = getBlock(questionType, mappedQuestion);
+    const questionBlock = getBlock({ type: questionType, content: mappedQuestion });
 
     // Parse the content as a Notion block object
     const answerType = config.answers?.find(a => a.answer === answer)?.type || 'paragraph';
     const mappedAnswer = config.answers?.find(a => a.answer === answer)?.mapped || answer;
 
-    const answerBlock = getBlock(answerType, mappedAnswer);
+    const answerBlock = getBlock({ type: answerType, content: mappedAnswer });
 
     return [questionBlock, answerBlock];
   };
@@ -74,19 +74,19 @@ function googleFormsToNotion (form) {
 
       // If the item is to be processed as a block...
       if (config.item === 'block') {
-        const blocks = parseResponseAsBlock(config, question, answer);
+        const blocks = parseResponseAsBlock({ config, question, answer });
 
         children.push(...blocks);
       // If the item is to be processed as a property
       } else {
-        const property = parseResponseAsProperty(config, question, answer);
+        const property = parseResponseAsProperty({ config, question, answer });
 
         Object.assign(properties, property);
       }
     }
 
     // Save the page's name to the properties
-    const name = parsePageName(questionsAndAnswers);
+    const name = parsePageName({ questionsAndAnswers });
 
     Object.assign(properties, name);
 

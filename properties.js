@@ -1,6 +1,6 @@
 'use strict';
 
-const getProperty = (type, content) => {
+const getProperty = ({ type, content }) => {
   const structures = {
     // Date
     date: {
